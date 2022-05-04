@@ -99,7 +99,7 @@ par(mfrow=c(2,2))
 ```
 
 7. Now, let’s look at all pollutants simultaneously. Fit a model predicting mortality rate using levels of nitric oxides, sulfur dioxide, and hydrocarbons as inputs. Use logarithmic transformations if/when appropriate. Plot the fitted regression model and interpret the coefficients.
-The model I ended up finding that seems to best fit the data invloved a logarithmic transformation for mortality, nitric oxides, and hydrocarbons, but not sulfur dioxide. The residual standard error of this model (pol6) is 0.05794 compared to the other versions I ran that were in the 50's. The coefficients of nitric oxide and sulfur dioxide are positive, indicating a positive relationship with mortality, while the hydrocarbon coefficient is negative, indicating a negative relationship with mortality. Both nitric oxides and hydrocarbons coefficents are statistically significant with an alpha of 0.05. In the residuals plot, the data are somewhat clustered around zero and have a similar plot to the last question. 
+The model I ended up finding that seems to best fit the data invloved a logarithmic transformation for mortality, nitric oxides, and hydrocarbons, but not sulfur dioxide. The residual standard error of this model (pol6) is 0.05794 compared to the other versions I ran that were in the 50's. The coefficients of nitric oxide and sulfur dioxide are positive, indicating a positive relationship with mortality, while the hydrocarbon coefficient is negative, indicating a negative relationship with mortality. Both nitric oxides and hydrocarbons coefficients are statistically significant with an alpha of 0.05. In the residuals plot, the data are somewhat clustered around zero and have a similar plot to the last question. 
 ```{r}
 #7. Now, let’s look at all pollutants simultaneously. Fit a model predicting mortality rate using levels of nitric oxides, sulfur dioxide, and hydrocarbons as inputs. Use logarithmic transformations if/when appropriate. Plot the fitted regression model and interpret the coefficients.
 
@@ -127,7 +127,7 @@ summary(pol4)
 pol5 <- lm(pollution$mort ~ lognox + pollution$so2 + loghc , pollution)
 summary(pol5)
 
-pol6 <- lm(logmort ~ lognox + pollution$so2 + loghc , pollution)
+pol6 <- lm(logmort ~ lognox + pollution$so2 + loghc, pollution)
 summary(pol6) #best model with lowest residual standard error
 
 ##Graph regression results
@@ -136,7 +136,7 @@ par(mfrow=c(2,2))
 ```
 
 BQ1. Investigate potential interaction effects among the three predictors. You can do so in a variety of ways (e.g., correlation tests, conditional plots, etc.). If you suspect interaction effects are important, refit the model with these interactions and interpret the fitted model coefficients.
-Based on using the cor.test function, it does appear that there may be interaction between the variables. All of the correlation tests result in a p-value less than 0.05 so we can say that those variables are significantly correlated to each other. In the regression analysis, log nox has a p-value less than 0.05, indicating that there is correlation between log nox concentrations and mortality, and the coefficient there is positive. The interaction between log nox and log hc has a p-value less than 0.05 and a negative coefficient. This model is tell us that log nox is significantly correlated with mortality, and the relationship is positive, plus log nox and log hc have a significant interaction and the relationship is negative.
+Based on using the cor.test function, it does appear that there may be interaction between the variables. All of the correlation tests result in a p-value less than 0.05 so we can say that those variables are significantly correlated to each other. In the regression analysis, log nox has a p-value less than 0.05, indicating that there is correlation between log nox concentrations and mortality, and the coefficient there is positive. The interaction between log nox and log hc has a p-value less than 0.05 and a negative coefficient. This model is tell us that log nox is significantly correlated with mortality, and the relationship is positive, plus log nox and log hc have a significant interaction and the relationship is negative. Additionally, S02 pollution and loghc seem to have a positive interaction based on their intercept and low p-value. Loghc and s02 do not appear to be singificantly correlated with mortality based on their p-values being higher than my alpha of 0.05.
 ```{r}
 #BQ1. Investigate potential interaction effects among the three predictors. You can do so in a variety of ways (e.g., correlation tests, conditional plots, etc.). If you suspect interaction effects are important, refit the model with these interactions and interpret the fitted model coefficients.
 mort <- pollution$mort
@@ -153,7 +153,7 @@ cor.test(loghc, logmort, method=c("pearson"))
 cor.test(s02, logmort, method=c("pearson"))
 
 ##Regression
-pol7 <- lm(logmort ~ lognox * pollution$so2 * loghc , pollution)
+pol7 <- lm(logmort ~ lognox + pollution$so2 + loghc +lognox * pollution$so2 + lognox * loghc + loghc * pollution$so2, pollution)
 summary(pol7) 
 ##Graph regression results
 par(mfrow=c(2,2))
@@ -163,4 +163,4 @@ par(mfrow=c(2,2))
 ```
 
 BQ2. Of the different models you analyzed for this scenario, which seems to be most suitable for the data/analysis? Why?
-Of the different models I analyzed for this scenario, this third and final one seems to be the most suitable. It had a low residual standard error of 0.05027, while the first logarithmic transformation model has a residual standard error of 0.06412 and the second model that included multiple variables had a residual standard error of 0.05794. This last model also had the highest adjusted R-squared of 0.425, while the other models has R-squared of 0.06476 and 0.2363. The residuals on this last model were also pretty symmetrical around zero. 
+Of the different models I analyzed for this scenario, this third and final one seems to be the most suitable. It had a low residual standard error of 0.04985, while the first logarithmic transformation model has a residual standard error of 0.06412 and the second model that included multiple variables had a residual standard error of 0.05794. This last model also had the highest adjusted R-squared of 0.4347, while the other models has R-squared of 0.06476 and 0.2363. The residuals on this last model were also pretty symmetrical around zero. 
